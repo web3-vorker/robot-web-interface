@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#e9efeb">
+    <title>RobotViRed — управление</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <div class="workspace">
+      <aside class="rail" aria-label="Информация о роботе">
+        <a class="brand" href="/" aria-label="RobotViRed, главная">
+          <span class="brand-mark" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+          </span>
+          <span class="brand-name">robot<span>vi</span>red</span>
+        </a>
+
+        <div class="rail-rule"></div>
+        <p class="rail-caption">Пульт управления</p>
+        <div class="rail-link" aria-current="page">
+          <span class="rail-link-mark" aria-hidden="true"></span>
+          Обзор робота
+        </div>
+
+        <div class="rail-bottom">
+          <span class="robot-silhouette" aria-hidden="true">
+            <svg viewBox="0 0 120 86" fill="none">
+              <path d="M25 29 38 14h44l13 15v31H25V29Z" stroke="currentColor" stroke-width="2"/>
+              <path d="M39 14V8h42v6M47 29h26v18H47zM34 60v10M86 60v10M45 47v13M75 47v13" stroke="currentColor" stroke-width="2"/>
+              <circle cx="60" cy="37" r="5" fill="currentColor"/>
+              <circle cx="32" cy="74" r="7" stroke="currentColor" stroke-width="2"/>
+              <circle cx="88" cy="74" r="7" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </span>
+          <p class="rail-robot-name">RobotViRed</p>
+          <p class="rail-robot-meta">Колёсная платформа</p>
+          <div class="rail-safety">
+            <span class="safety-dot" aria-hidden="true"></span>
+            <span>Держите STOP<br>в зоне доступа</span>
+          </div>
+          <p class="rail-version">Локальная сеть</p>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Операторская</p>
+            <h1>Управление роботом</h1>
+          </div>
+          <div class="connection" id="connection" data-state="checking" role="status" aria-live="polite">
+            <span class="connection-dot" aria-hidden="true"></span>
+            <span id="connection-label">Проверяем связь</span>
+          </div>
+        </header>
+
+        <div class="control-room">
+          <section class="camera-section" aria-labelledby="camera-title">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Обзор</p>
+                <h2 id="camera-title">Камера робота</h2>
+              </div>
+              <span class="live-state" id="video-state">
+                <span class="live-dot" aria-hidden="true"></span>
+                <span id="video-label">Подключаем камеру</span>
+              </span>
+            </div>
+
+            <div class="camera-frame">
+              <img id="video-feed" class="video-feed" alt="Видеопоток с камеры робота" hidden>
+              <div class="camera-placeholder" id="video-placeholder">
+                <div class="camera-reticle" aria-hidden="true">
+                  <span></span><i></i>
+                </div>
+                <p class="placeholder-title" id="placeholder-title">Ожидаем изображение</p>
+                <p class="placeholder-copy" id="placeholder-copy">Подключаемся к камере RobotViRed</p>
+                <button class="text-button" id="reconnect-camera" type="button" hidden>Подключить снова</button>
+              </div>
+              <div class="camera-corner camera-corner-top" aria-hidden="true"></div>
+              <div class="camera-corner camera-corner-bottom" aria-hidden="true"></div>
+              <div class="camera-overlay">
+                <span class="camera-overlay-label">Передняя камера</span>
+                <span id="camera-clock">--:--:--</span>
+              </div>
+            </div>
+            <div class="camera-caption">
+              <span>Поток MJPEG</span>
+              <span class="caption-divider" aria-hidden="true"></span>
+              <span>Просмотр в реальном времени</span>
+              <button class="refresh-button" id="reconnect-camera-small" type="button" aria-label="Переподключить камеру" title="Переподключить камеру">
+                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <path d="M16.2 7.3A6.5 6.5 0 0 0 4.7 5.1L3.2 6.7M3.2 6.7V3.8M3.2 6.7h2.9M3.8 12.7a6.5 6.5 0 0 0 11.5 2.2l1.5-1.6m0 0v2.9m0-2.9h-2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          </section>
+
+          <aside class="side-panel">
+            <section class="status-section" aria-labelledby="status-title">
+              <div class="section-heading compact-heading">
+                <div>
+                  <p class="eyebrow">Телеметрия</p>
+                  <h2 id="status-title">Состояние</h2>
+                </div>
+                <span class="status-pulse" id="status-pulse" aria-hidden="true"></span>
+              </div>
+              <div class="status-readout">
+                <span class="readout-label">Движение</span>
+                <strong id="robot-state">Нет данных</strong>
+                <span class="readout-divider"></span>
+                <span class="readout-label">Последняя команда</span>
+                <strong class="readout-secondary" id="last-command">—</strong>
+              </div>
+              <div class="battery-line">
+                <span class="battery-icon" aria-hidden="true"><i id="battery-level"></i></span>
+                <span>Заряд</span>
+                <strong id="battery-value">—</strong>
+              </div>
+              <p class="updated-at" id="updated-at">Ожидаем данные робота</p>
+            </section>
+
+            <section class="drive-section" aria-labelledby="drive-title">
+              <div class="section-heading compact-heading">
+                <div>
+                  <p class="eyebrow">Ручное управление</p>
+                  <h2 id="drive-title">Движение</h2>
+                </div>
+                <span class="keyboard-hint" aria-label="Управление клавишами W A S D">W A S D</span>
+              </div>
+
+              <div class="dpad" aria-label="Клавиши управления">
+                <span class="dpad-spacer" aria-hidden="true"></span>
+                <button class="direction-key" type="button" data-command="forward" aria-label="Вперёд, W">
+                  <span class="key-letter">W</span><span class="key-arrow" aria-hidden="true">↑</span>
+                </button>
+                <span class="dpad-spacer" aria-hidden="true"></span>
+                <button class="direction-key" type="button" data-command="left" aria-label="Влево, A">
+                  <span class="key-letter">A</span><span class="key-arrow" aria-hidden="true">←</span>
+                </button>
+                <button class="direction-key" type="button" data-command="backward" aria-label="Назад, S">
+                  <span class="key-letter">S</span><span class="key-arrow" aria-hidden="true">↓</span>
+                </button>
+                <button class="direction-key" type="button" data-command="right" aria-label="Вправо, D">
+                  <span class="key-letter">D</span><span class="key-arrow" aria-hidden="true">→</span>
+                </button>
+              </div>
+
+              <div class="speed-control">
+                <label for="speed">
+                  <span>Скорость</span>
+                  <strong><span id="speed-value">60</span><small>%</small></strong>
+                </label>
+                <input id="speed" type="range" min="0" max="100" value="60">
+                <div class="speed-scale" aria-hidden="true"><span>Медленно</span><span>Быстро</span></div>
+              </div>
+
+              <button class="stop-button" id="stop-button" type="button">
+                <span class="stop-symbol" aria-hidden="true"></span>
+                Остановить робота
+                <span class="stop-key">SPACE</span>
+              </button>
+              <p class="drive-feedback" id="drive-feedback" role="status" aria-live="polite">Зажмите клавишу или кнопку, чтобы двигаться</p>
+            </section>
+          </aside>
+        </div>
+
+        <footer class="safety-note">
+          <span class="safety-icon" aria-hidden="true">!</span>
+          <p><strong>Безопасность движения.</strong> Отпускание клавиши отправляет команду остановки. При потере связи команда может не дойти — остановку при обрыве связи должен обеспечивать watchdog робота.</p>
+        </footer>
+      </main>
+    </div>
+  </body>
+</html>
